@@ -3,9 +3,9 @@ import { createDeleteBlockZoneUseCase } from './application/use-cases/deleteBloc
 import { createListBlockZonesUseCase } from './application/use-cases/listBlockZones';
 import { createToggleBlockZoneUseCase } from './application/use-cases/toggleBlockZone';
 import { createUpdateBlockZoneUseCase } from './application/use-cases/updateBlockZone';
-import { AsyncStorageBlockZoneRepository } from './infrastructure/repositories/AsyncStorageBlockZoneRepository';
+import { MMKVBlockZoneRepository } from './infrastructure/repositories/MMKVBlockZoneRepository';
 
-const blockZoneRepository = new AsyncStorageBlockZoneRepository();
+const blockZoneRepository = new MMKVBlockZoneRepository();
 
 export const blockZoneUseCases = {
   list: createListBlockZonesUseCase(blockZoneRepository),

@@ -1,13 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createMMKV, MMKV } from 'react-native-mmkv';
 
 import { BlockZone } from '../../domain/entities/BlockZone';
 import { BlockZoneRepository } from '../../domain/repositories/BlockZoneRepository';
 
 const STORAGE_KEY = '@ghost-touch/block-zones';
 
-export class AsyncStorageBlockZoneRepository implements BlockZoneRepository {
+export class MMKVBlockZoneRepository implements BlockZoneRepository {
+  constructor(private readonly storage: MMKV = createMMKV()) {}
+
   async getAll(): Promise<BlockZone[]> {
-    const raw = await AsyncStorage.getItem(STORAGE_KEY);
+    const raw = this.storage.getString(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as BlockZone[]) : [];
   }
 
@@ -19,14 +21,11 @@ export class AsyncStorageBlockZoneRepository implements BlockZoneRepository {
     } else {
       zones.push(zone);
     }
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(zones));
+    this.storage.set(STORAGE_KEY, JSON.stringify(zones));
   }
 
   async remove(id: string): Promise<void> {
     const zones = await this.getAll();
-    await AsyncStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(zones.filter((zone) => zone.id !== id))
-    );
+    this.storage.set(STORAGE_KEY, JSON.stringify(zones.filter((zone) => zone.id !== id)));
   }
 }
