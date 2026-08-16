@@ -23,8 +23,10 @@
     "@types/react": "~19.2.2",
     "eslint": "^9.39.5",
     "eslint-config-expo": "^57.0.0",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-expo": "^57.0.2",
+    "lint-staged": "^17.2.0",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -33,7 +35,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky",
+    "typecheck": "tsc --noEmit"
   },
   "private": true,
   "jest": {
@@ -41,6 +45,11 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/example/"
+    ]
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js}": [
+      "eslint --fix"
     ]
   }
 }
